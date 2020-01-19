@@ -1,4 +1,4 @@
-import util from './utility.js';
+const util = require('./utility.js')
 const canvas = document.querySelector('canvas');
 const algos = document.getElementsByClassName('algo-btn');
 const controllers = document.getElementsByClassName('controller-btn');
