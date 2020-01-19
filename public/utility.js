@@ -1,6 +1,5 @@
-const hello = () => {
-    console.log('hello');
+function hello(){
+    console.log('hellu')
 }
 
-module.exports.hello = hello;
 

@@ -1,4 +1,5 @@
-const util = require('./utility.js')
+// $.getScript('utility.js');
+// import * as util from './utility';
 const canvas = document.querySelector('canvas');
 const algos = document.getElementsByClassName('algo-btn');
 const controllers = document.getElementsByClassName('controller-btn');
@@ -10,7 +11,6 @@ const neighbour_text = document.getElementById('neighbour-text');
 const random_input = document.getElementById('randomize-num');
 const random_btn = document.getElementById('randomize-btn');
 const board_data = document.getElementById('board-data');
-
 
 let data = []
 let centroid = []
@@ -91,6 +91,8 @@ const init = () => {
     random_input.value = 100;
     canvas.x = canvas.getBoundingClientRect().x;
     canvas.y = canvas.getBoundingClientRect().y;
+
+
 }
 
 const generateSingleData = event => {
@@ -106,7 +108,7 @@ const deleteData = event => {
 }
 
 const randomizeData = num => {
-    console.log('h')
+    hello();
 }
 
 //Events
