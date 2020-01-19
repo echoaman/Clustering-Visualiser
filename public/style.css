@@ -14,10 +14,6 @@ header, section{
     justify-content: space-around;
 }
 
-/* canvas{
-    border: 1px black solid;
-} */
-
 .canvas-container{
     width: 100%;
     align-items: center;
@@ -52,12 +48,3 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance:textfield;
 }
-
-/* .algorithm-panel::after, .controller-panel::after{
-    content: '';
-    width: 10px;
-    margin: 0 auto;
-    display: block;
-    border-top: 1px solid red;
-} */
-
