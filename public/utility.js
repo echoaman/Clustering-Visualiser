@@ -1,4 +1,4 @@
-function Data(x, y, radius, color, centroid){
+function Data(x, y, radius, color, centroid) {
     this.x = x;
     this.y = y;
     this.radius = radius;
@@ -15,32 +15,80 @@ const drawPoint = (context, point) => {
     context.fill();
 }
 
+const drawCentroid = (context, centroid) => {
+    let rot = Math.PI / 2 * 3;
+    let x = centroid.x;
+    let y = centroid.y;
+    let step = Math.PI / 5;
+
+    // context.strokeStyle = "#000";
+    context.beginPath();
+    context.moveTo(centroid.x, centroid.y - radius)
+    for (i = 0; i < 5; i++) {
+        x = centroid.x + Math.cos(rot) * radius;
+        y = centroid.y + Math.sin(rot) * radius;
+        context.lineTo(x, y)
+        rot += step
+
+        x = centroid.x + Math.cos(rot) * 2;
+        y = centroid.y + Math.sin(rot) * 2;
+        context.lineTo(x, y)
+        rot += step
+    }
+    context.lineTo(centroid.x, centroid.y - radius);
+    context.closePath();
+    context.lineWidth = 1;
+    context.strokeStyle = centroid.color;
+    context.stroke();
+    context.fillStyle = centroid.color;
+    context.fill();
+}
+
 const generateNewPoints = (canvas, dataCount, centroid) => {
     let context = canvas.getContext('2d');
 
     let dataArray = []
-    context.clearRect(0,0,canvas.width,canvas.height);
-    for(let i = 0; i < dataCount; i++){
-        dataArray.push(new Data(Math.random()*(canvas.width-radius*2)+radius,Math.random()*(canvas.height-radius*2)+radius, radius, '#000000', false));
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < dataCount; i++) {
+        dataArray.push(new Data(Math.random() * (canvas.width - radius * 2) + radius, Math.random() * (canvas.height - radius * 2) + radius, radius, '#000000', false));
         drawPoint(context, dataArray[i]);
     }
 
-    for(let i = 0; i<centroid.length; i++)
+    for (let i = 0; i < centroid.length; i++)
         drawPoint(context, centroid[i]);
-    
+
     return dataArray;
 }
 
 const generateSingleData = (canvas, x, y) => {
     let context = canvas.getContext('2d');
     let point = new Data(x, y, radius, '#000000', false);
-    drawPoint(context,point);
+    drawPoint(context, point);
 
     return (point);
-} 
+}
+
+const getColor = () => {
+    let color = '';
+    let palette = '0123456789abcdef';
+    while (color.length < 6)
+        color += palette[Math.floor(Math.random() * palette.length)];
+
+    return color;
+}
+
+const generateCentroid = (canvas, x, y) => {
+    let context = canvas.getContext('2d');
+
+    let color = '#' + getColor();
+    let point = new Data(x, y, radius, color, true);
+    drawCentroid(context, point);
+
+    return point;
+}
 
 const clearBoard = (canvas) => {
     let context = canvas.getContext('2d');
-    context.clearRect(0,0,canvas.width,canvas.height);
+    context.clearRect(0, 0, canvas.width, canvas.height);
 }
 

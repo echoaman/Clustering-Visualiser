@@ -100,18 +100,24 @@ const init = () => {
 }
 
 const addData = event => {
-    data_count = parseInt(board_data.value);
+    data_count = parseInt(board_data.innerHTML);
     if(data_count + 1 > 1000){
         alert('Number of data points cannot be more than 1000!');
     }else{
-        data = [...data, generateSingleData(canvas, event.x - canvas.x, event.y - canvas.y)]
+        data.push(generateSingleData(canvas, event.x - canvas.x, event.y - canvas.y))
         random_input.value = data.length;
         board_data.innerHTML = data.length;
+        console.log(data);
+        console.log(centroid);
     }
 }
 
 const addCentroid = event => {
-    alert('centroid');
+    if(centroid.length > 10){
+        alert('Max number of centroid = 10!');
+    }else{
+        centroid.push(generateCentroid(canvas, event.x - canvas.x, event.y - canvas.y));
+    }
 }
 
 const deleteData = event => {
@@ -143,8 +149,10 @@ random_btn.addEventListener('click', () => {
 
     board_data.innerHTML = data_num;
     random_input.value = data_num;
-    // randomizeData(data_num)
+    
     data = generateNewPoints(canvas,data_num,centroid);
+    console.log(data);
+    console.log(centroid);
 });
 
 random_input.addEventListener('keyup', (event) => {
