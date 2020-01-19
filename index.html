@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <title>Clustering Visualizer</title>
+</head>
+
+<body>
+    <header class="controller algorithm-panel">
+        <button class="algo-btn" id='kmeans' title="K-Means Algorithm">K-Means</button>
+        <button class="algo-btn" id='kmedoids' title="K-Medoids Algorithm">K-Medoids</button>
+        <button class="algo-btn" id='fcm' title="Fuzzy C-Means Algorithm">FC Means</button>
+        <button class="algo-btn" id='dbscan' title="Density-Based Spatial Clustering of Applications with Noise">DBSCAN</button>
+    </header>
+    <!-- <div class="inner"></div> -->
+
+    <section class="controller controller-panel">
+        <div id='randomize' class="controller-btn" style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
+            <input type='number' min="0" max="1000" id='randomize-num'>
+            <button id='randomize-btn'>Randomize</button>
+        </div>
+        <button class="controller-btn" id='data'>Add Data</button>
+        <button class="controller-btn" id='centroid'>Add Centroid</button>
+        <button class="controller-btn" id='remove'>Remove Data/Centroid</button>
+        <button class="controller-btn" id='clear'>Clear Board</button>
+        <button class="controller-btn" id='visualize'>Visualize</button>
+    </section>
+    <!-- <div class="inner"></div> -->
+
+    <section class="controller parameter-panel">
+        <div class="parameter-container" title="Neighbourhood of a data"> 
+            <input type="range" min="1" max="10" value="5" id='eps-slider'>
+            <span id='eps-text'>&epsilon; = 5</span>
+        </div>
+        <div class="parameter-container">
+            <span id = 'board-data'>100</span>
+            <span>Data Points on the board</span>
+        </div>
+        <div class="parameter-container" title="Minimum number of neighbours">
+            <input type="range" min="1" max="10" value="5" id="neighbour-slider">
+            <span id="neighbour-text">N = 5</span>
+        </div>
+    </section>
+
+    <section class="canvas-container">
+        <canvas style="width: 1500px;height: 500px;"></canvas>
+    </section>
+
+    <script src="scripts/board.js"></script>
+</body>
+
+</html>
