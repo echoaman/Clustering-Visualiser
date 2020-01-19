@@ -31,6 +31,13 @@ const generateNewPoints = (canvas, dataCount, centroid) => {
     return dataArray;
 }
 
+const generateSingleData = (canvas, x, y) => {
+    let context = canvas.getContext('2d');
+    let point = new Data(x, y, radius, '#000000', false);
+    drawPoint(context,point);
+
+    return (point);
+} 
 
 const clearBoard = (canvas) => {
     let context = canvas.getContext('2d');

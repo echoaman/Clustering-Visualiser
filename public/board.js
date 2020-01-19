@@ -19,17 +19,17 @@ let data = []
 let centroid = []
 
 const changeEvent = id => {
-    canvas.removeEventListener('click', generateSingleData, false);
-    canvas.removeEventListener('click', generateCentroid, false);
+    canvas.removeEventListener('click', addData, false);
+    canvas.removeEventListener('click', addCentroid, false);
     canvas.removeEventListener('click', deleteData, false);
 
     switch (id) {
         case 'data':
-            canvas.addEventListener('click', generateSingleData, false);
+            canvas.addEventListener('click', addData, false);
             break;
 
         case 'centroid':
-            canvas.addEventListener('click', generateCentroid, false);
+            canvas.addEventListener('click', addCentroid, false);
             break;
 
         case 'remove':
@@ -99,11 +99,18 @@ const init = () => {
     random_btn.click();
 }
 
-const generateSingleData = event => {
-    alert('single');
+const addData = event => {
+    data_count = parseInt(board_data.value);
+    if(data_count + 1 > 1000){
+        alert('Number of data points cannot be more than 1000!');
+    }else{
+        data = [...data, generateSingleData(canvas, event.x - canvas.x, event.y - canvas.y)]
+        random_input.value = data.length;
+        board_data.innerHTML = data.length;
+    }
 }
 
-const generateCentroid = event => {
+const addCentroid = event => {
     alert('centroid');
 }
 
@@ -135,7 +142,7 @@ random_btn.addEventListener('click', () => {
     }
 
     board_data.innerHTML = data_num;
-    random_input.value = data_num
+    random_input.value = data_num;
     // randomizeData(data_num)
     data = generateNewPoints(canvas,data_num,centroid);
 });
