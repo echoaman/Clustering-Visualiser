@@ -1,5 +1,3 @@
-// $.getScript('utility.js');
-// import * as util from './utility';
 const canvas = document.querySelector('canvas');
 const algos = document.getElementsByClassName('algo-btn');
 const controllers = document.getElementsByClassName('controller-btn');
@@ -11,6 +9,11 @@ const neighbour_text = document.getElementById('neighbour-text');
 const random_input = document.getElementById('randomize-num');
 const random_btn = document.getElementById('randomize-btn');
 const board_data = document.getElementById('board-data');
+
+canvas.width = 1500;
+canvas.height = 500;
+canvas.x = canvas.getBoundingClientRect().x;
+canvas.y = canvas.getBoundingClientRect().y;
 
 let data = []
 let centroid = []
@@ -34,6 +37,9 @@ const changeEvent = id => {
             break;
 
         case 'clear':
+            clearBoard(canvas);
+            data = []
+            centroid = []
             break;
 
         case 'visualize':
@@ -89,10 +95,8 @@ const init = () => {
     neighbour_slider.value = 5;
     eps_slider.value = 5;
     random_input.value = 100;
-    canvas.x = canvas.getBoundingClientRect().x;
-    canvas.y = canvas.getBoundingClientRect().y;
 
-
+    random_btn.click();
 }
 
 const generateSingleData = event => {
@@ -107,9 +111,6 @@ const deleteData = event => {
     alert('delete');
 }
 
-const randomizeData = num => {
-    hello();
-}
 
 //Events
 eps_slider.addEventListener('change', () => {
@@ -135,7 +136,8 @@ random_btn.addEventListener('click', () => {
 
     board_data.innerHTML = data_num;
     random_input.value = data_num
-    randomizeData(data_num)
+    // randomizeData(data_num)
+    data = generateNewPoints(canvas,data_num,centroid);
 });
 
 random_input.addEventListener('keyup', (event) => {
