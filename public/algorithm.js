@@ -1,8 +1,5 @@
 let start, end, percentage, context, animating;
 var timer;
-let position = Object;
-position.x = null;
-position.y = null;
 
 // const getNewPosOnLine = () => {
 //     position.x = start.x * (1.0 - percentage) + end.x * percentage;
@@ -51,10 +48,8 @@ const updateColor = (data, centroids) => {
     return centroids[index].color;
 }
 
-const kmeans = (canvas, dataArray, centroidArray) => {
+const clusterMeans = (canvas, dataArray, centroidArray) => {
     let context = canvas.getContext('2d');
-
-    resetBoard(canvas,dataArray,centroidArray);
 
     let i = 0;
     timer = setInterval(() => {
@@ -70,24 +65,31 @@ const kmeans = (canvas, dataArray, centroidArray) => {
         if (i == dataArray.length) {
             clearInterval(timer)
         }
-    }, 1000/60)
+    }, 1000 / 60);
+}
 
+const kmeans = (canvas, dataArray, centroidArray) => {
+    resetBoard(canvas, dataArray, centroidArray);
+    clusterMeans(canvas, data, centroidArray);
 }
 
 
 const kmedoids = (canvas, dataArray, centroidArray) => {
+    resetBoard(canvas, dataArray, centroidArray);
     console.log('kmed')
     console.log(dataArray);
     console.log(centroidArray);
 }
 
 const fcm = (canvas, dataArray, centroidArray) => {
+    resetBoard(canvas, dataArray, centroidArray);
     console.log('fcm');
     console.log(dataArray);
     console.log(centroidArray);
 }
 
 const dbscan = (canvas, dataArray, eps, N) => {
+    resetBoard(canvas, dataArray, []);
     console.log('dbscan')
     console.log(dataArray);
     console.log(eps);
