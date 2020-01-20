@@ -6,15 +6,6 @@ var timer;
 //     position.y = start.y * (1.0 - percentage) + end.y * percentage;
 // }
 
-// const displayLine = () => {
-//     context.beginPath();
-//     context.moveTo(start.x, start.y);
-//     // context.lineTo(position.x, position.y);
-//     context.lineTo(position.x, position.y);
-//     context.strokeStyle = start.color;
-//     context.stroke();
-// }
-
 // const drawLine = () => {
 //     getNewPosOnLine();
 //     percentage += 0.1;
@@ -30,22 +21,22 @@ var timer;
 //     }
 // }
 
-const euclideanDist = (data, centroid) => {
-    return Math.sqrt(Math.pow(data.x - centroid.x, 2) + Math.pow(data.y - centroid.y, 2))
+const euclideanDist = (point, cen) => {
+    return Math.sqrt(Math.pow(point.x - cen.x, 2) + Math.pow(point.y - cen.y, 2))
 }
 
-const updateColor = (data, centroids) => {
+const updateColor = (point, centroidArray) => {
     let dist = Infinity;
     let index = null;
-    for (let i = 0; i < centroids.length; i++) {
-        let udist = euclideanDist(data, centroids[i]);
+    for (let i = 0; i < centroidArray.length; i++) {
+        let udist = euclideanDist(point, centroidArray[i]);
         if (udist < dist) {
             dist = udist;
             index = i;
         }
     }
 
-    return centroids[index].color;
+    return centroidArray[index].color;
 }
 
 const clusterMeans = (canvas, dataArray, centroidArray) => {
