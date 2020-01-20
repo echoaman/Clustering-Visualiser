@@ -40,6 +40,10 @@ const changeEvent = id => {
             clearBoard(canvas);
             data = []
             centroid = []
+            random_input.value = 0;
+            board_data.innerHTML = 0;
+            console.log(data);
+            console.log(centroid);
             break;
 
         case 'visualize':
@@ -59,6 +63,10 @@ const changeAlgo = id => {
         parameters[2].style.display = 'flex';
         controllers[3].innerHTML = 'Remove Data';
         controllers[2].style.display = 'none';
+        displayPoints(canvas,data);
+        centroid = [];
+        console.log(data);
+        console.log(centroid);
     } else {
         parameters[0].style.display = 'none';
         parameters[2].style.display = 'none';
@@ -107,21 +115,32 @@ const addData = event => {
         data.push(generateSingleData(canvas, event.x - canvas.x, event.y - canvas.y))
         random_input.value = data.length;
         board_data.innerHTML = data.length;
-        console.log(data);
-        console.log(centroid);
     }
+    console.log(data);
+    console.log(centroid);
 }
 
 const addCentroid = event => {
-    if(centroid.length > 10){
+    if(centroid.length >= 10){
         alert('Max number of centroid = 10!');
     }else{
         centroid.push(generateCentroid(canvas, event.x - canvas.x, event.y - canvas.y));
     }
+
+    console.log(data);
+    console.log(centroid);
 }
 
 const deleteData = event => {
-    alert('delete');
+    let { new_data, new_centroid } = removePoint(canvas,event.x - canvas.x, event.y - canvas.y, data, centroid);
+    data = new_data;
+    centroid = new_centroid;
+
+    random_input.value = data.length;
+    board_data.innerHTML = data.length;
+
+    console.log(data);
+    console.log(centroid);
 }
 
 
