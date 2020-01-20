@@ -95,9 +95,9 @@ const clearBoard = (canvas) => {
 const displayPoints = (canvas, data) => {
     let context = canvas.getContext('2d');
 
-    context.clearRect(0,0,canvas.width,canvas.height);
-    for(let i = 0; i<data.length; i++)
-        drawPoint(context,data[i])
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < data.length; i++)
+        drawPoint(context, data[i])
 }
 
 const removePoint = (canvas, x, y, data, centroid) => {
@@ -106,41 +106,60 @@ const removePoint = (canvas, x, y, data, centroid) => {
     let isCentroid = null;
     let context = canvas.getContext('2d');
 
-    for(let i = 0; i<data.length; i++){
-        let dist = Math.sqrt(Math.pow(x - data[i].x,2) + Math.pow(y - data[i].y,2));
-        if(dist <= minDist){
+    for (let i = 0; i < data.length; i++) {
+        let dist = Math.sqrt(Math.pow(x - data[i].x, 2) + Math.pow(y - data[i].y, 2));
+        if (dist <= minDist) {
             index = i;
             isCentroid = false;
             minDist = dist;
         }
     }
 
-    for(let i = 0; i<centroid.length; i++){
-        let dist = Math.sqrt(Math.pow(x - centroid[i].x,2) + Math.pow(y - centroid[i].y,2));
-        if(dist <= minDist){
+    for (let i = 0; i < centroid.length; i++) {
+        let dist = Math.sqrt(Math.pow(x - centroid[i].x, 2) + Math.pow(y - centroid[i].y, 2));
+        if (dist <= minDist) {
             index = i;
             isCentroid = true;
             minDist = dist;
         }
     }
 
-    if(index !== null){
-        if(isCentroid)
-            centroid.splice(index,1);
-        else data.splice(index,1);
+    if (index !== null) {
+        if (isCentroid)
+            centroid.splice(index, 1);
+        else data.splice(index, 1);
     }
 
 
     clearBoard(canvas);
-    for(let i = 0; i<data.length; i++)
-        drawPoint(context,data[i]);
+    for (let i = 0; i < data.length; i++)
+        drawPoint(context, data[i]);
 
-    for(let i = 0;i<centroid.length; i++)
-        drawCentroid(context,centroid[i])
+    for (let i = 0; i < centroid.length; i++)
+        drawCentroid(context, centroid[i])
     // displayPoints(canvas,[...data, ...centroid])
 
     return {
         new_data: data,
         new_centroid: centroid
     }
+}
+
+const resetBoard = (canvas, data, centroid) => {
+    let context = canvas.getContext('2d');
+
+    console.log('reset')
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    data.forEach(d => {
+        d.color = '#000000';
+    });
+
+    for (let i = 0; i < data.length; i++)
+        drawPoint(context, data[i]);
+
+    for (let i = 0; i < centroid.length; i++)
+        drawCentroid(context, centroid[i])
+
 }

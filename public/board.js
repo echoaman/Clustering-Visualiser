@@ -43,6 +43,7 @@ const changeEvent = id => {
             centroid = []
             random_input.value = 0;
             board_data.innerHTML = 0;
+            changeController('data');
             break;
 
         case 'visualize':
@@ -69,6 +70,39 @@ const changeEvent = id => {
             break;
     }
 }
+
+eps_slider.addEventListener('change', () => {
+    eps_text.innerHTML = `&epsilon; = ${eps_slider.value}`
+});
+
+neighbour_slider.addEventListener('change', () => {
+    neighbour_text.innerHTML = `N = ${neighbour_slider.value}`
+});
+
+random_btn.addEventListener('click', () => {
+    data_num = parseInt(random_input.value);
+    if (data_num < 0) {
+        alert('Number of data points cannot be negative!');
+        data_num = 0;
+    } else if (data_num > 1000) {
+        alert('Number of data points cannot be more than 1000!');
+        data_num = 1000;
+    } else if (isNaN(data_num)) {
+        alert('Please enter a number!');
+        data_num = 0;
+    }
+
+    board_data.innerHTML = data_num;
+    random_input.value = data_num;
+    
+    data = generateNewPoints(canvas,data_num,centroid);
+});
+
+random_input.addEventListener('keyup', (event) => {
+    if (event.keyCode === 13) {
+        random_btn.click();
+    }
+});
 
 const changeAlgo = id => {
     for (let i = 0; i < algos.length; i++) {
@@ -153,41 +187,5 @@ const deleteData = event => {
     random_input.value = data.length;
     board_data.innerHTML = data.length;
 }
-
-
-//Events
-eps_slider.addEventListener('change', () => {
-    eps_text.innerHTML = `&epsilon; = ${eps_slider.value}`
-});
-
-neighbour_slider.addEventListener('change', () => {
-    neighbour_text.innerHTML = `N = ${neighbour_slider.value}`
-});
-
-random_btn.addEventListener('click', () => {
-    data_num = parseInt(random_input.value);
-    if (data_num < 0) {
-        alert('Number of data points cannot be negative!');
-        data_num = 0;
-    } else if (data_num > 1000) {
-        alert('Number of data points cannot be more than 1000!');
-        data_num = 1000;
-    } else if (isNaN(data_num)) {
-        alert('Please enter a number!');
-        data_num = 0;
-    }
-
-    board_data.innerHTML = data_num;
-    random_input.value = data_num;
-    
-    data = generateNewPoints(canvas,data_num,centroid);
-});
-
-random_input.addEventListener('keyup', (event) => {
-    if (event.keyCode === 13) {
-        random_btn.click();
-    }
-});
-
 
 init();
