@@ -17,6 +17,7 @@ canvas.y = canvas.getBoundingClientRect().y;
 
 let data = []
 let centroid = []
+let selectedAlgo = null;
 
 const changeEvent = id => {
     canvas.removeEventListener('click', addData, false);
@@ -42,11 +43,29 @@ const changeEvent = id => {
             centroid = []
             random_input.value = 0;
             board_data.innerHTML = 0;
-            console.log(data);
-            console.log(centroid);
             break;
 
         case 'visualize':
+            switch (selectedAlgo) {
+                case 'kmeans':
+                    kmeans(canvas,data,centroid);
+                    break;
+
+                case('kmedoids'):
+                    kmedoids(canvas,data,centroid);
+                    break;
+
+                case('fcm'):
+                    fcm(canvas,data,centroid);
+                    break;
+
+                case('dbscan'):
+                    dbscan(canvas,data,parseInt(eps_slider.value), parseInt(neighbour_slider.value));
+                    break;
+            
+                default:
+                    break;
+            }
             break;
     }
 }
@@ -58,6 +77,8 @@ const changeAlgo = id => {
         else algos[i].style.opacity = 0.5;
     }
 
+    selectedAlgo = id;
+
     if (id === 'dbscan') {
         parameters[0].style.display = 'flex';
         parameters[2].style.display = 'flex';
@@ -65,8 +86,6 @@ const changeAlgo = id => {
         controllers[2].style.display = 'none';
         displayPoints(canvas,data);
         centroid = [];
-        console.log(data);
-        console.log(centroid);
     } else {
         parameters[0].style.display = 'none';
         parameters[2].style.display = 'none';
@@ -116,8 +135,6 @@ const addData = event => {
         random_input.value = data.length;
         board_data.innerHTML = data.length;
     }
-    console.log(data);
-    console.log(centroid);
 }
 
 const addCentroid = event => {
@@ -126,9 +143,6 @@ const addCentroid = event => {
     }else{
         centroid.push(generateCentroid(canvas, event.x - canvas.x, event.y - canvas.y));
     }
-
-    console.log(data);
-    console.log(centroid);
 }
 
 const deleteData = event => {
@@ -138,9 +152,6 @@ const deleteData = event => {
 
     random_input.value = data.length;
     board_data.innerHTML = data.length;
-
-    console.log(data);
-    console.log(centroid);
 }
 
 
@@ -170,8 +181,6 @@ random_btn.addEventListener('click', () => {
     random_input.value = data_num;
     
     data = generateNewPoints(canvas,data_num,centroid);
-    console.log(data);
-    console.log(centroid);
 });
 
 random_input.addEventListener('keyup', (event) => {
