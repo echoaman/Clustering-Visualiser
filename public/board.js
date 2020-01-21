@@ -12,6 +12,7 @@ const board_data = document.getElementById('board-data');
 const condiv = document.getElementsByClassName('controller');
 const board_xcoor = document.getElementById('board-xcoor');
 const board_ycoor = document.getElementById('board-ycoor');
+const med_slider = document.getElementById('medoid-slider');
 
 canvas.width = 1500;
 canvas.height = 500;
@@ -52,6 +53,9 @@ const changeEvent = id => {
         case 'visualize':
             if (data.length == 0) {
                 alert('Add Data!');
+            } else if(centroid.length > data.length){
+                alert('More Centroids than Data!');
+                changeController('data');
             } else switch (selectedAlgo) {
                 case 'kmeans':
                     // console.log(condiv);
@@ -138,19 +142,46 @@ const changeAlgo = id => {
 
     selectedAlgo = id;
 
-    if (id === 'dbscan') {
-        parameters[0].style.display = 'flex';
-        parameters[3].style.display = 'flex';
-        controllers[3].innerHTML = 'Remove Data';
-        controllers[2].style.display = 'none';
-        displayPoints(canvas, data);
-        centroid = [];
-    } else {
-        parameters[0].style.display = 'none';
-        parameters[3].style.display = 'none';
-        controllers[3].innerHTML = 'Remove Data/Centroid';
-        controllers[2].style.display = 'block';
+    switch (id) {
+        case 'kmeans':
+            parameters[0].style.display = 'none';
+            parameters[2].style.display = 'none';
+            parameters[4].style.display = 'none';
+            controllers[3].innerHTML = 'Remove Data/Centroid';
+            controllers[2].style.display = 'block';
+            break;
+        case 'kmedoids':
+            parameters[0].style.display = 'none';
+            parameters[2].style.display = 'flex';
+            parameters[4].style.display = 'none';
+            controllers[3].innerHTML = 'Remove Data';
+            controllers[2].style.display = 'none';
+            displayPoints(canvas,data);
+            centroid = [];
+            break;
+        case 'fcm':
+            parameters[0].style.display = 'none';
+            parameters[2].style.display = 'none';
+            parameters[4].style.display = 'none';
+            controllers[3].innerHTML = 'Remove Data';
+            controllers[2].style.display = 'none';
+            displayPoints(canvas,data);
+            centroid = [];
+            break;
+        case 'dbscan':
+            parameters[0].style.display = 'flex';
+            parameters[2].style.display = 'none';
+            parameters[4].style.display = 'flex';
+            controllers[3].innerHTML = 'Remove Data';
+            controllers[2].style.display = 'none';
+            displayPoints(canvas,data);
+            centroid = [];
+            break;
+        default:
+            break;
     }
+
+    changeController('data');
 }
 
 const changeController = id => {
@@ -199,8 +230,11 @@ const addData = event => {
 const addCentroid = event => {
     if (centroid.length >= 10) {
         alert('Max number of centroid = 10!');
-    } else {
+    } else if(centroid.length + 1 <= data.length){
         centroid.push(generateCentroid(canvas, event.x - canvas.x, event.y - canvas.y));
+    }else{
+        alert('More Centroids than Data!');
+        changeController('data');
     }
 }
 

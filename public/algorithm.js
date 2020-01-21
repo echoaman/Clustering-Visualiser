@@ -6,6 +6,7 @@ let position = Object;
 let prevKmeans = {};
 let currKmeans = {};
 let context;
+let dataFrameLimit;
 
 const updateSections = (type) => {
     sections = document.getElementsByTagName('section');
@@ -14,7 +15,7 @@ const updateSections = (type) => {
     }
 }
 
-const getNewPosOnLine = () => {
+const k_means_getNewPosOnLine = () => {
     position.x = start.x * (1.0 - percentage) + end.x * percentage;
     position.y = start.y * (1.0 - percentage) + end.y * percentage;
 }
@@ -24,7 +25,7 @@ const euclideanDist = (point, cen) => {
     return Math.sqrt(Math.pow(point.x - cen.x, 2) + Math.pow(point.y - cen.y, 2))
 }
 
-const updateColor = (point, centroidArray) => {
+const k_means_updateColor = (point, centroidArray) => {
     let dist = Infinity;
     let index = null;
     for (let i = 0; i < centroidArray.length; i++) {
@@ -39,7 +40,7 @@ const updateColor = (point, centroidArray) => {
     return centroidArray[index].color;
 }
 
-const newCentroidCoord = (dataArr) => {
+const k_means_newCentroidCoord = (dataArr) => {
     let x = 0;
     let y = 0;
 
@@ -59,7 +60,7 @@ const newCentroidCoord = (dataArr) => {
 
 
 
-const updateCentroid = (canvas,centroidArray, dataArray) => {
+const k_means_updateCentroid = (canvas,centroidArray, dataArray) => {
     let i = 0;
     percentage = 0.0;
     timerId = setInterval(() => {
@@ -67,8 +68,8 @@ const updateCentroid = (canvas,centroidArray, dataArray) => {
             // console.log('within 1')
             percentage += 0.1;
             start = centroidArray[i];
-            end = newCentroidCoord(currKmeans[i]);
-            getNewPosOnLine();
+            end = k_means_newCentroidCoord(currKmeans[i]);
+            k_means_getNewPosOnLine();
             position.color = start.color;
 
             clearBoard(canvas);
@@ -94,20 +95,20 @@ const updateCentroid = (canvas,centroidArray, dataArray) => {
         if(i == centroidArray.length){
             clearInterval(timerId)
             if (JSON.stringify(currKmeans) === JSON.stringify(prevKmeans)){
-                alert('Completed!');
+                alert('GG!');
                 updateSections('auto');
                 data = dataArray;
                 centroid = centroidArray;
 
             }else{
                 prevKmeans = currKmeans;
-                clusterMeans(canvas, dataArray, centroidArray);
+                k_means_clusterMeans(canvas, dataArray, centroidArray);
             }
         }
     }, 1000 / 60);
 }
 
-const clusterMeans = (canvas, dataArray, centroidArray) => {
+const k_means_clusterMeans = (canvas, dataArray, centroidArray) => {
     // prevKmeans = {};
     currKmeans = {}
     for(let j = 0; j < centroidArray.length; j++)
@@ -117,7 +118,7 @@ const clusterMeans = (canvas, dataArray, centroidArray) => {
 
     let i = 0;
     timerId = setInterval(() => {
-        dataArray[i].color = updateColor(dataArray[i], centroidArray);
+        dataArray[i].color = k_means_updateColor(dataArray[i], centroidArray);
 
         clearBoard(canvas);
         for (let j = 0; j < dataArray.length; j++)
@@ -131,9 +132,9 @@ const clusterMeans = (canvas, dataArray, centroidArray) => {
         //exit/completion condition
         if (i == dataArray.length) {
             clearInterval(timerId)
-            updateCentroid(canvas,centroidArray, dataArray)
+            k_means_updateCentroid(canvas,centroidArray, dataArray)
         }
-    }, 1000 / 144);
+    }, dataFrameLimit);
 }
 
 const kmeans = (canvas, dataArray, centroidArray) => {
@@ -144,9 +145,13 @@ const kmeans = (canvas, dataArray, centroidArray) => {
         currKmeans[i] = [];
     }
 
+    if(dataArray.length < 500){
+        dataFrameLimit = 1000 / 144;
+    }else dataFrameLimit = 1000 / 240;
+
     updateSections('none');
     resetBoard(canvas, dataArray, centroidArray);
-    clusterMeans(canvas, data, centroidArray);
+    k_means_clusterMeans(canvas, data, centroidArray);
 
 }
 
