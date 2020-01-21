@@ -31,9 +31,14 @@ button{
     cursor: pointer;
 }
 
+.parameter-panel{
+    width: 75%;
+    margin: 0 auto;
+}
+
 .parameter-container{
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     flex-direction: column;
     align-items: center;
 }

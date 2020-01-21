@@ -9,7 +9,9 @@ const neighbour_text = document.getElementById('neighbour-text');
 const random_input = document.getElementById('randomize-num');
 const random_btn = document.getElementById('randomize-btn');
 const board_data = document.getElementById('board-data');
-const condiv = document.getElementsByClassName('controller')
+const condiv = document.getElementsByClassName('controller');
+const board_xcoor = document.getElementById('board-xcoor');
+const board_ycoor = document.getElementById('board-ycoor');
 
 canvas.width = 1500;
 canvas.height = 500;
@@ -48,30 +50,51 @@ const changeEvent = id => {
             break;
 
         case 'visualize':
-            switch (selectedAlgo) {
+            if (data.length == 0) {
+                alert('Add Data!');
+            } else switch (selectedAlgo) {
                 case 'kmeans':
                     // console.log(condiv);
-                    kmeans(canvas,data,centroid);
+                    if (centroid.length == 0) {
+                        alert('Add Centroids!');
+                        break;
+                    }
+                    kmeans(canvas, data, centroid);
                     break;
 
-                case('kmedoids'):
-                    kmedoids(canvas,data,centroid);
+                case ('kmedoids'):
+                    if (centroid.length == 0) {
+                        alert('Add Centroids!');
+                        break;
+                    }
+                    kmedoids(canvas, data, centroid);
                     break;
 
-                case('fcm'):
-                    fcm(canvas,data,centroid);
+                case ('fcm'):
+                    if (centroid.length == 0) {
+                        alert('Add Centroids!');
+                        break;
+                    }
+                    fcm(canvas, data, centroid);
                     break;
 
-                case('dbscan'):
-                    dbscan(canvas,data,parseInt(eps_slider.value), parseInt(neighbour_slider.value));
+                case ('dbscan'):
+                    dbscan(canvas, data, parseInt(eps_slider.value), parseInt(neighbour_slider.value));
                     break;
-            
+
                 default:
                     break;
             }
             break;
     }
 }
+
+canvas.addEventListener('mousemove', (event) => {
+    let x = event.x - canvas.x;
+    let y = event.y - canvas.y;
+    board_xcoor.innerHTML = `X &cong; ${Math.floor(x)}`;
+    board_ycoor.innerHTML = `Y &cong; ${Math.floor(y)}`;
+})
 
 eps_slider.addEventListener('change', () => {
     eps_text.innerHTML = `&epsilon; = ${eps_slider.value}`
@@ -96,8 +119,8 @@ random_btn.addEventListener('click', () => {
 
     board_data.innerHTML = data_num;
     random_input.value = data_num;
-    
-    data = generateNewPoints(canvas,data_num,centroid);
+
+    data = generateNewPoints(canvas, data_num, centroid);
 });
 
 random_input.addEventListener('keyup', (event) => {
@@ -117,14 +140,14 @@ const changeAlgo = id => {
 
     if (id === 'dbscan') {
         parameters[0].style.display = 'flex';
-        parameters[2].style.display = 'flex';
+        parameters[3].style.display = 'flex';
         controllers[3].innerHTML = 'Remove Data';
         controllers[2].style.display = 'none';
-        displayPoints(canvas,data);
+        displayPoints(canvas, data);
         centroid = [];
     } else {
         parameters[0].style.display = 'none';
-        parameters[2].style.display = 'none';
+        parameters[3].style.display = 'none';
         controllers[3].innerHTML = 'Remove Data/Centroid';
         controllers[2].style.display = 'block';
     }
@@ -164,9 +187,9 @@ const init = () => {
 
 const addData = event => {
     data_count = parseInt(board_data.innerHTML);
-    if(data_count + 1 > 1000){
+    if (data_count + 1 > 1000) {
         alert('Number of data points cannot be more than 1000!');
-    }else{
+    } else {
         data.push(generateSingleData(canvas, event.x - canvas.x, event.y - canvas.y))
         random_input.value = data.length;
         board_data.innerHTML = data.length;
@@ -174,20 +197,22 @@ const addData = event => {
 }
 
 const addCentroid = event => {
-    if(centroid.length >= 10){
+    if (centroid.length >= 10) {
         alert('Max number of centroid = 10!');
-    }else{
+    } else {
         centroid.push(generateCentroid(canvas, event.x - canvas.x, event.y - canvas.y));
     }
 }
 
 const deleteData = event => {
-    let { new_data, new_centroid } = removePoint(canvas,event.x - canvas.x, event.y - canvas.y, data, centroid);
+    let { new_data, new_centroid } = removePoint(canvas, event.x - canvas.x, event.y - canvas.y, data, centroid);
     data = new_data;
     centroid = new_centroid;
 
     random_input.value = data.length;
     board_data.innerHTML = data.length;
 }
+
+
 
 init();

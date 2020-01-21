@@ -9,7 +9,7 @@ let context;
 
 const updateSections = (type) => {
     sections = document.getElementsByTagName('section');
-    for(let i = 0; i < sections.length; i++){
+    for(let i = 0; i < sections.length-1; i++){
         sections[i].style.pointerEvents = type;
     }
 }
@@ -94,9 +94,10 @@ const updateCentroid = (canvas,centroidArray, dataArray) => {
         if(i == centroidArray.length){
             clearInterval(timerId)
             if (JSON.stringify(currKmeans) === JSON.stringify(prevKmeans)){
-                alert('completed');
-
+                alert('Completed!');
                 updateSections('auto');
+                data = dataArray;
+                centroid = centroidArray;
 
             }else{
                 prevKmeans = currKmeans;
