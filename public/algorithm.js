@@ -1,5 +1,5 @@
-let start = Object; 
-let end = Object; 
+let start = Object;
+let end = Object;
 let percentage;
 var timerId, animationId;
 let position = Object;
@@ -10,7 +10,7 @@ let dataFrameLimit;
 
 const updateSections = (type) => {
     sections = document.getElementsByTagName('section');
-    for(let i = 0; i < sections.length-1; i++){
+    for (let i = 0; i < sections.length - 1; i++) {
         sections[i].style.pointerEvents = type;
     }
 }
@@ -60,11 +60,11 @@ const k_means_newCentroidCoord = (dataArr) => {
 
 
 
-const k_means_updateCentroid = (canvas,centroidArray, dataArray) => {
+const k_means_updateCentroid = (canvas, centroidArray, dataArray) => {
     let i = 0;
     percentage = 0.0;
     timerId = setInterval(() => {
-        if(percentage <= 1){
+        if (percentage <= 1) {
             // console.log('within 1')
             percentage += 0.1;
             start = centroidArray[i];
@@ -74,17 +74,17 @@ const k_means_updateCentroid = (canvas,centroidArray, dataArray) => {
 
             clearBoard(canvas);
             dataArray.forEach(d => {
-                drawPoint(context,d);
+                drawPoint(context, d);
             });
 
-            drawCentroid(context,position);
-            for(let j =0; j < centroidArray.length; j++){
-                if(j !== i){
-                    drawCentroid(context,centroidArray[j]);
+            drawCentroid(context, position);
+            for (let j = 0; j < centroidArray.length; j++) {
+                if (j !== i) {
+                    drawCentroid(context, centroidArray[j]);
                 }
             }
         }
-        if(percentage > 1.0){
+        if (percentage > 1.0) {
             // console.log('post 1');
             centroidArray[i].x = end.x;
             centroidArray[i].y = end.y;
@@ -92,15 +92,15 @@ const k_means_updateCentroid = (canvas,centroidArray, dataArray) => {
             percentage = 0.0;
         }
 
-        if(i == centroidArray.length){
+        if (i == centroidArray.length) {
             clearInterval(timerId)
-            if (JSON.stringify(currKmeans) === JSON.stringify(prevKmeans)){
+            if (JSON.stringify(currKmeans) === JSON.stringify(prevKmeans)) {
                 alert('GG!');
                 updateSections('auto');
                 data = dataArray;
                 centroid = centroidArray;
 
-            }else{
+            } else {
                 prevKmeans = currKmeans;
                 k_means_clusterMeans(canvas, dataArray, centroidArray);
             }
@@ -111,7 +111,7 @@ const k_means_updateCentroid = (canvas,centroidArray, dataArray) => {
 const k_means_clusterMeans = (canvas, dataArray, centroidArray) => {
     // prevKmeans = {};
     currKmeans = {}
-    for(let j = 0; j < centroidArray.length; j++)
+    for (let j = 0; j < centroidArray.length; j++)
         currKmeans[j] = [];
 
     // console.log(currKmeans);
@@ -132,7 +132,7 @@ const k_means_clusterMeans = (canvas, dataArray, centroidArray) => {
         //exit/completion condition
         if (i == dataArray.length) {
             clearInterval(timerId)
-            k_means_updateCentroid(canvas,centroidArray, dataArray)
+            k_means_updateCentroid(canvas, centroidArray, dataArray)
         }
     }, dataFrameLimit);
 }
@@ -140,14 +140,14 @@ const k_means_clusterMeans = (canvas, dataArray, centroidArray) => {
 const kmeans = (canvas, dataArray, centroidArray) => {
     context = canvas.getContext('2d');
 
-    for(let i = 0; i < centroidArray.length; i++){
+    for (let i = 0; i < centroidArray.length; i++) {
         prevKmeans[i] = [];
         currKmeans[i] = [];
     }
 
-    if(dataArray.length < 500){
+    if (dataArray.length < 500) {
         dataFrameLimit = 1000 / 144;
-    }else dataFrameLimit = 1000 / 240;
+    } else dataFrameLimit = 1000 / 240;
 
     updateSections('none');
     resetBoard(canvas, dataArray, centroidArray);
@@ -180,7 +180,7 @@ const dbscan = (canvas, dataArray, eps, N) => {
 
 
 /*
- 
+
 kmeans edge case - empty cluster
 
  */

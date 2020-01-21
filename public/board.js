@@ -13,6 +13,7 @@ const condiv = document.getElementsByClassName('controller');
 const board_xcoor = document.getElementById('board-xcoor');
 const board_ycoor = document.getElementById('board-ycoor');
 const med_slider = document.getElementById('medoid-slider');
+const med_text = document.getElementById('medoid-text');
 
 canvas.width = 1500;
 canvas.height = 500;
@@ -22,6 +23,19 @@ canvas.y = canvas.getBoundingClientRect().y;
 let data = []
 let centroid = []
 let selectedAlgo = null;
+
+const updateMedoidSlider = (data_num) => {
+    if (data_num == 0)
+        data_num = 1;
+
+    if (data_num >= 10)
+        med_slider.max = 10;
+    else {
+        med_slider.max = data_num;
+        med_slider.value = data_num;
+        med_text.innerHTML = `K = ${data_num}`;
+    }
+}
 
 const changeEvent = id => {
     canvas.removeEventListener('click', addData, false);
@@ -48,12 +62,13 @@ const changeEvent = id => {
             random_input.value = 0;
             board_data.innerHTML = 0;
             changeController('data');
+            updateMedoidSlider(0);
             break;
 
         case 'visualize':
             if (data.length == 0) {
                 alert('Add Data!');
-            } else if(centroid.length > data.length){
+            } else if (centroid.length > data.length) {
                 alert('More Centroids than Data!');
                 changeController('data');
             } else switch (selectedAlgo) {
@@ -101,12 +116,16 @@ canvas.addEventListener('mousemove', (event) => {
 })
 
 eps_slider.addEventListener('change', () => {
-    eps_text.innerHTML = `&epsilon; = ${eps_slider.value}`
+    eps_text.innerHTML = `&epsilon; = ${eps_slider.value}`;
 });
 
 neighbour_slider.addEventListener('change', () => {
-    neighbour_text.innerHTML = `N = ${neighbour_slider.value}`
+    neighbour_text.innerHTML = `N = ${neighbour_slider.value}`;
 });
+
+med_slider.addEventListener('change', () => {
+    med_text.innerHTML = `K = ${med_slider.value}`;
+})
 
 random_btn.addEventListener('click', () => {
     data_num = parseInt(random_input.value);
@@ -124,6 +143,8 @@ random_btn.addEventListener('click', () => {
     board_data.innerHTML = data_num;
     random_input.value = data_num;
 
+    updateMedoidSlider(data_num);
+
     data = generateNewPoints(canvas, data_num, centroid);
 });
 
@@ -132,6 +153,14 @@ random_input.addEventListener('keyup', (event) => {
         random_btn.click();
     }
 });
+
+const updateParameterAndController = (arr) => {
+    parameters[0].style.display = arr[0];
+    parameters[2].style.display = arr[1];
+    parameters[4].style.display = arr[2];
+    controllers[3].innerHTML = arr[3];
+    controllers[2].style.display = arr[4];
+}
 
 const changeAlgo = id => {
     for (let i = 0; i < algos.length; i++) {
@@ -144,37 +173,21 @@ const changeAlgo = id => {
 
     switch (id) {
         case 'kmeans':
-            parameters[0].style.display = 'none';
-            parameters[2].style.display = 'none';
-            parameters[4].style.display = 'none';
-            controllers[3].innerHTML = 'Remove Data/Centroid';
-            controllers[2].style.display = 'block';
+            updateParameterAndController(['none', 'none', 'none', 'Remove Data/Centroid', 'block']);
             break;
         case 'kmedoids':
-            parameters[0].style.display = 'none';
-            parameters[2].style.display = 'flex';
-            parameters[4].style.display = 'none';
-            controllers[3].innerHTML = 'Remove Data';
-            controllers[2].style.display = 'none';
-            displayPoints(canvas,data);
+            updateParameterAndController(['none', 'flex', 'none', 'Remove Data', 'none']);
+            displayPoints(canvas, data);
             centroid = [];
             break;
         case 'fcm':
-            parameters[0].style.display = 'none';
-            parameters[2].style.display = 'none';
-            parameters[4].style.display = 'none';
-            controllers[3].innerHTML = 'Remove Data';
-            controllers[2].style.display = 'none';
-            displayPoints(canvas,data);
+            updateParameterAndController(['none', 'none', 'none', 'Remove Data', 'none']);
+            displayPoints(canvas, data);
             centroid = [];
             break;
         case 'dbscan':
-            parameters[0].style.display = 'flex';
-            parameters[2].style.display = 'none';
-            parameters[4].style.display = 'flex';
-            controllers[3].innerHTML = 'Remove Data';
-            controllers[2].style.display = 'none';
-            displayPoints(canvas,data);
+            updateParameterAndController(['flex', 'none', 'flex', 'Remove Data', 'none']);
+            displayPoints(canvas, data);
             centroid = [];
             break;
         default:
@@ -224,15 +237,17 @@ const addData = event => {
         data.push(generateSingleData(canvas, event.x - canvas.x, event.y - canvas.y))
         random_input.value = data.length;
         board_data.innerHTML = data.length;
+
+        updateMedoidSlider(data.length);
     }
 }
 
 const addCentroid = event => {
     if (centroid.length >= 10) {
         alert('Max number of centroid = 10!');
-    } else if(centroid.length + 1 <= data.length){
+    } else if (centroid.length + 1 <= data.length) {
         centroid.push(generateCentroid(canvas, event.x - canvas.x, event.y - canvas.y));
-    }else{
+    } else {
         alert('More Centroids than Data!');
         changeController('data');
     }
@@ -243,10 +258,10 @@ const deleteData = event => {
     data = new_data;
     centroid = new_centroid;
 
+    updateMedoidSlider(data.length);
+
     random_input.value = data.length;
     board_data.innerHTML = data.length;
 }
-
-
 
 init();
