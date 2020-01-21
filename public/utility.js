@@ -11,6 +11,9 @@ const radius = 5;
 const drawPoint = (context, point) => {
     context.beginPath();
     context.arc(point.x, point.y, radius, 0, Math.PI * 2, false);
+    context.lineWidth = 1;
+    context.strokeStyle = '#000000'
+    context.stroke();
     context.fillStyle = point.color;
     context.fill();
 }
@@ -38,7 +41,7 @@ const drawCentroid = (context, point) => {
     context.lineTo(point.x, point.y - radius);
     context.closePath();
     context.lineWidth = 1;
-    context.strokeStyle = point.color;
+    context.strokeStyle = '#000000';
     context.stroke();
     context.fillStyle = point.color;
     context.fill();
@@ -148,7 +151,7 @@ const removePoint = (canvas, x, y, dataArray, centroidArray) => {
 const resetBoard = (canvas, dataArray, centroidArray) => {
     let context = canvas.getContext('2d');
 
-    console.log('reset')
+    // console.log('reset')
 
     context.clearRect(0, 0, canvas.width, canvas.height);
 
