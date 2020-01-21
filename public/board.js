@@ -9,6 +9,7 @@ const neighbour_text = document.getElementById('neighbour-text');
 const random_input = document.getElementById('randomize-num');
 const random_btn = document.getElementById('randomize-btn');
 const board_data = document.getElementById('board-data');
+const condiv = document.getElementsByClassName('controller')
 
 canvas.width = 1500;
 canvas.height = 500;
@@ -49,6 +50,7 @@ const changeEvent = id => {
         case 'visualize':
             switch (selectedAlgo) {
                 case 'kmeans':
+                    // console.log(condiv);
                     kmeans(canvas,data,centroid);
                     break;
 

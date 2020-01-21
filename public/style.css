@@ -9,7 +9,7 @@
     box-sizing: border-box;
 }
 
-header, section{
+section{
     display: flex;
     justify-content: space-around;
 }
