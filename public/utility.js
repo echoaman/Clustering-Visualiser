@@ -1,18 +1,21 @@
-function Data(x, y, radius, color, isCentroid) {
+function Data(x, y, radius, color, count, group, visited) {
     this.x = x;
     this.y = y;
     this.radius = radius;
     this.color = color;
-    this.isCentroid = isCentroid;
+    this.count = count;
+    this.group = group;
+    this.visited = visited;
 }
 
 const radius = 5;
+const defaultColor = '#ffffff';
 
 const drawPoint = (context, point) => {
     context.beginPath();
     context.arc(point.x, point.y, radius, 0, Math.PI * 2, false);
     context.lineWidth = 1;
-    context.strokeStyle = '#000000'
+    context.strokeStyle = defaultColor;
     context.stroke();
     context.fillStyle = point.color;
     context.fill();
@@ -41,7 +44,7 @@ const drawCentroid = (context, point) => {
     context.lineTo(point.x, point.y - radius);
     context.closePath();
     context.lineWidth = 1;
-    context.strokeStyle = '#000000';
+    context.strokeStyle = "#000000";
     context.stroke();
     context.fillStyle = point.color;
     context.fill();
@@ -53,7 +56,7 @@ const generateNewPoints = (canvas, dataCount, centroidArray) => {
     let dataArray = []
     context.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < dataCount; i++) {
-        dataArray.push(new Data(Math.random() * (canvas.width - radius * 2) + radius, Math.random() * (canvas.height - radius * 2) + radius, radius, '#000000', false));
+        dataArray.push(new Data(Math.random() * (canvas.width - radius * 2) + radius, Math.random() * (canvas.height - radius * 2) + radius, radius, defaultColor,0,false,false));
         drawPoint(context, dataArray[i]);
     }
 
@@ -65,7 +68,7 @@ const generateNewPoints = (canvas, dataCount, centroidArray) => {
 
 const generateSingleData = (canvas, x, y) => {
     let context = canvas.getContext('2d');
-    let point = new Data(x, y, radius, '#000000', false);
+    let point = new Data(x, y, radius, defaultColor,0,false,false);
     drawPoint(context, point);
 
     return (point);
@@ -84,7 +87,7 @@ const generateCentroid = (canvas, x, y) => {
     let context = canvas.getContext('2d');
 
     let color = '#' + getColor();
-    let point = new Data(x, y, radius, color, true);
+    let point = new Data(x, y, radius, color,0,false,false);
     drawCentroid(context, point);
 
     return point;
@@ -156,7 +159,10 @@ const resetBoard = (canvas, dataArray, centroidArray) => {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     dataArray.forEach(d => {
-        d.color = '#000000';
+        d.color = defaultColor;
+        d.count = 0;
+        d.group = false;
+        d.visited = false;
     });
 
     for (let i = 0; i < dataArray.length; i++)

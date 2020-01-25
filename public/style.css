@@ -2,7 +2,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #fff;
+    background-color: #000;
+    color: white;
 }
 
 *::after{
@@ -18,7 +19,11 @@ section{
     width: 100%;
     align-items: center;
     height: calc(100vh - 150px);
-    background-color: #eee;
+    background-color: #111;
+}
+
+canvas{
+    border: 1px solid white;
 }
 
 .controller{
@@ -51,4 +56,9 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
   -moz-appearance:textfield;
+  text-align: center;
+}
+
+button:focus {
+    outline:0;
 }

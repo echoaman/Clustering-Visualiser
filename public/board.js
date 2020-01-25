@@ -166,7 +166,7 @@ const changeAlgo = id => {
     for (let i = 0; i < algos.length; i++) {
         if (algos[i].id === id)
             algos[i].style.opacity = 1;
-        else algos[i].style.opacity = 0.5;
+        else algos[i].style.opacity = 0.3;
     }
 
     selectedAlgo = id;
@@ -177,17 +177,17 @@ const changeAlgo = id => {
             break;
         case 'kmedoids':
             updateParameterAndController(['none', 'flex', 'none', 'Remove Data', 'none']);
-            displayPoints(canvas, data);
+            // displayPoints(canvas, data);
             centroid = [];
             break;
         case 'fcm':
             updateParameterAndController(['none', 'none', 'none', 'Remove Data', 'none']);
-            displayPoints(canvas, data);
+            // displayPoints(canvas, data);
             centroid = [];
             break;
         case 'dbscan':
             updateParameterAndController(['flex', 'none', 'flex', 'Remove Data', 'none']);
-            displayPoints(canvas, data);
+            // displayPoints(canvas, data);
             centroid = [];
             break;
         default:
@@ -201,7 +201,7 @@ const changeController = id => {
     for (let i = 0; i < controllers.length; i++) {
         if (controllers[i].id === id)
             controllers[i].style.opacity = 1;
-        else controllers[i].style.opacity = 0.5;
+        else controllers[i].style.opacity = 0.3;
     }
 
     changeEvent(id);
@@ -222,8 +222,8 @@ const init = () => {
 
     changeAlgo('kmeans');
     changeController('data');
-    neighbour_slider.value = 5;
-    eps_slider.value = 5;
+    // neighbour_slider.value = 5;
+    // eps_slider.value = 5;
     random_input.value = 100;
 
     random_btn.click();
